@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Consultas de <span th:text="${paciente.nome}"></span></h1>
+    <table class="table">
+        <tr>
+            <th>ID</th><th>Data</th><th>Médico</th><th>Descrição</th>
+        </tr>
+        <tr th:each="consulta : ${consultas}">
+            <td th:text="${consulta.id}"></td>
+            <td th:text="${consulta.data}"></td>
+            <td th:text="${consulta.medico.nome}"></td>
+            <td th:text="${consulta.descricao}"></td>
+        </tr>
+    </table>
+    <a class="btn btn-secondary" href="/pacientes">Voltar</a>
+</div>
+</body>
+</html>

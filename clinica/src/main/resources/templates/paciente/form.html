@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1 th:text="${paciente.id == null} ? 'Novo Paciente' : 'Editar Paciente'"></h1>
+    <form th:action="@{/pacientes/save}" th:object="${paciente}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input class="form-control" type="text" th:field="*{nome}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('cpf')}" th:errors="*{nome}"></label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">CPF</label>
+            <input class="form-control" type="text" th:field="*{cpf}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></label>
+        </div>
+        <button class="btn btn-success" type="submit">Salvar</button>
+        <a class="btn btn-secondary" href="/pacientes">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

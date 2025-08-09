@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-4">
+  <h1>Horários do dia <span th:text="${data}"></span></h1>
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Horário</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="agenda : ${agendas}">
+      <td th:text="${agenda.horarioInicio} + ' - ' + ${agenda.horarioFim}"></td>
+      <td>
+        <a class="btn btn-sm btn-success"
+           th:if="${agenda.status.name() == 'DISPONIVEL'}"
+           th:href="@{/consultas/novo(agendaId=${agenda.id})}">
+          Marcar Consulta
+        </a>
+
+        <a class="btn btn-sm btn-danger"
+           th:if="${agenda.status.name() == 'INDISPONIVEL' and agenda.consulta != null}"
+           th:href="@{/consultas/excluir/{id}(id=${agenda.consulta.id})}">
+          Desmarcar
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Consultas do Dr. <span th:text="${medico.nome}"></span></h1>
+    <table class="table">
+        <tr>
+            <th>ID</th><th>Data e hora</th><th>Paciente</th><th>Descrição</th>
+        </tr>
+        <tr th:each="consulta : ${consultas}">
+            <td th:text="${consulta.id}"></td>
+            <td th:text="|${consulta.agenda.data} de ${consulta.agenda.horarioInicio} às ${consulta.agenda.horarioFim}|"></td>
+            <td th:text="${consulta.paciente.nome}"></td>
+            <td th:text="${consulta.descricao}"></td>
+        </tr>
+    </table>
+    <a class="btn btn-secondary" href="/medicos">Voltar</a>
+</div>
+</body>
+</html>

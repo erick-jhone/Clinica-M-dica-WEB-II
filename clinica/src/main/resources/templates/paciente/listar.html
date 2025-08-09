@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Pacientes</h1>
+
+    <form method="get" action="/pacientes/buscar" class="mb-3">
+        <div class="form-group">
+            <label for="nome">Buscar por nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome do paciente">
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+        <a class="btn btn-secondary mt-2" href="/pacientes">Limpar</a>
+    </form>
+
+
+
+    <a class="btn btn-primary mb-3" href="/pacientes/novo">Novo Paciente</a>
+    <table class="table">
+        <tr>
+            <th>ID</th><th>Nome</th><th>CPF</th><th>Ações</th>
+        </tr>
+        <tr th:each="paciente : ${pacientes}">
+            <td th:text="${paciente.id}"></td>
+            <td th:text="${paciente.nome}"></td>
+            <td th:text="${paciente.cpf}"></td>
+            <td>
+                <a class="btn btn-info btn-sm" th:href="@{|/pacientes/editar/${paciente.id}|}">Editar</a>
+                <a class="btn btn-danger btn-sm" th:href="@{|/pacientes/excluir/${paciente.id}|}">Excluir</a>
+                <a class="btn btn-secondary btn-sm" th:href="@{|/pacientes/${paciente.id}/consultas|}">Consultas</a>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

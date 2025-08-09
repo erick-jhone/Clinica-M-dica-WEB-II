@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Médicos</h1>
+
+    <form method="get" action="/medicos/buscar" class="mb-3">
+        <div class="form-group">
+            <label for="nome">Buscar por nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome do médico">
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+        <a class="btn btn-secondary mt-2" href="/medicos">Limpar</a>
+    </form>
+
+    <a class="btn btn-success mb-3" href="/medicos/novo">Novo Médico</a>
+
+    <table class="table">
+        <tr>
+            <th>ID</th><th>Nome</th><th>CRM</th><th>Especialidade</th><th>Ações</th><th>Agenda</th>
+        </tr>
+        <tr th:each="medico : ${medicos}">
+            <td th:text="${medico.id}"></td>
+            <td th:text="${medico.nome}"></td>
+            <td th:text="${medico.crm}"></td>
+            <td th:text="${medico.especialidade}"></td>
+            <td>
+                <a class="btn btn-info btn-sm" th:href="@{|/medicos/editar/${medico.id}|}">Editar</a>
+                <a class="btn btn-danger btn-sm" th:href="@{|/medicos/excluir/${medico.id}|}">Excluir</a>
+                <a class="btn btn-secondary btn-sm" th:href="@{|/medicos/${medico.id}/consultas|}">Consultas</a>
+            </td>
+            <td>
+                <a class="btn btn-dark" th:href="@{|/secretaria/${medico.id}/agenda/calendario|}">
+                    <i class="bi bi-calendar"></i>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

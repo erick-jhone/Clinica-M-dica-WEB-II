@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1 th:text="${medico.id == null} ? 'Novo Médico' : 'Editar Médico'"></h1>
+    <form th:action="@{/medicos/salvar}" th:object="${medico}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input class="form-control" type="text" th:field="*{nome}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">CRM</label>
+            <input class="form-control" type="text" th:field="*{crm}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('crm')}" th:errors="*{crm}"></label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Especialidade</label>
+            <input class="form-control" type="text" th:field="*{especialidade}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('especialidade')}" th:errors="*{especialidade}"></label>
+        </div>
+
+        <!-- Horário de Atendimento -->
+        <div class="mb-3">
+            <label class="form-label">Horário de Início do Atendimento</label>
+            <input class="form-control" type="time" th:field="*{horarioInicioAtendimento}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('horarioInicioAtendimento')}" th:errors="*{horarioInicioAtendimento}"></label>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Horário de Término do Atendimento</label>
+            <input class="form-control" type="time" th:field="*{horarioFimAtendimento}" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('horarioFimAtendimento')}" th:errors="*{horarioFimAtendimento}"></label>
+        </div>
+
+        <!-- Lista de Intervalos -->
+        <div class="mb-3">
+            <label class="form-label">Intervalos de Atendimento</label>
+            <div id="intervalos-container">
+                <div th:each="intervalo, iterStat : *{intervalos}" class="intervalo-item mb-2 border p-2 rounded">
+                    <div class="row">
+                        <div class="col">
+                            <label>Início</label>
+                            <input type="time" class="form-control"
+                                   th:field="*{intervalos[__${iterStat.index}__].horaInicio}" />
+                        </div>
+                        <div class="col">
+                            <label>Fim</label>
+                            <input type="time" class="form-control"
+                                   th:field="*{intervalos[__${iterStat.index}__].horaFim}" />
+                        </div>
+                        <div class="col-auto d-flex align-items-end">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    onclick="removerIntervalo(this)">Remover</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão para adicionar novo intervalo -->
+            <button type="button" class="btn btn-primary mt-2" onclick="adicionarIntervalo()">Adicionar Intervalo</button>
+        </div>
+
+        <button class="btn btn-success" type="submit">Salvar</button>
+        <a class="btn btn-secondary" href="/medicos">Cancelar</a>
+    </form>
+</div>
+
+<script th:inline="javascript">
+    let contadorIntervalos = /*[[${#lists.size(medico.intervalos)}]]*/ 0;
+
+    function adicionarIntervalo() {
+        const container = document.getElementById("intervalos-container");
+        const index = contadorIntervalos++;
+
+        const html = `
+        <div class="intervalo-item mb-2 border p-2 rounded">
+            <div class="row">
+                <div class="col">
+                    <label>Início</label>
+                    <input type="time" name="intervalos[${index}].horaInicio" class="form-control" />
+                </div>
+                <div class="col">
+                    <label>Fim</label>
+                    <input type="time" name="intervalos[${index}].horaFim" class="form-control" />
+                </div>
+                <div class="col-auto d-flex align-items-end">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removerIntervalo(this)">Remover</button>
+                </div>
+            </div>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function removerIntervalo(botao) {
+        botao.closest('.intervalo-item').remove();
+    }
+</script>
+
+</body>
+</html>

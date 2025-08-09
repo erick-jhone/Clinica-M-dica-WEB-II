@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Consultas</h1>
+
+    <form method="get" action="/consultas/por-data" class="mb-3">
+        <div class="form-group">
+            <label for="data">Filtrar por data:</label>
+            <input type="date" class="form-control" id="data" name="data">
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Filtrar</button>
+    </form>
+
+    <a class="btn btn-success mb-3" href="/consultas/novo">Nova Consulta</a>
+
+    <table class="table">
+        <tr>
+            <th>Data</th>
+            <th>Horário</th>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+        </tr>
+        <tr th:each="consulta : ${consultas}">
+            <td th:text="${consulta.agenda.data}"></td>
+            <td th:text="${consulta.agenda.horarioInicio}"></td>
+            <td th:text="${consulta.paciente.nome}"></td>
+            <td th:text="${consulta.medico.nome}"></td>
+            <td th:text="${consulta.descricao}"></td>
+            <td>
+                <a class="btn btn-info btn-sm" th:href="@{|/consultas/editar/${consulta.id}|}">Editar</a>
+                <a class="btn btn-danger btn-sm" th:href="@{|/consultas/excluir/${consulta.id}|}">Excluir</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
