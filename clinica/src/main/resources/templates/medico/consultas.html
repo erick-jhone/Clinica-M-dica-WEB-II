@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/head :: head"></head>
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
@@ -8,13 +9,21 @@
     <h1>Consultas do Dr. <span th:text="${medico.nome}"></span></h1>
     <table class="table">
         <tr>
-            <th>ID</th><th>Data e hora</th><th>Paciente</th><th>Descrição</th>
+            <th>ID</th><th>Data e hora</th><th>Paciente</th><th>Descrição</th><th>Ações</th>
         </tr>
         <tr th:each="consulta : ${consultas}">
             <td th:text="${consulta.id}"></td>
             <td th:text="|${consulta.agenda.data} de ${consulta.agenda.horarioInicio} às ${consulta.agenda.horarioFim}|"></td>
             <td th:text="${consulta.paciente.nome}"></td>
             <td th:text="${consulta.descricao}"></td>
+            <td>
+                <a class="btn btn-info btn-sm"
+                   sec:authorize="hasAnyRole('ADMIN','SECRETARIO')"
+                   th:href="@{|/consultas/editar/${consulta.id}|}">Editar</a>
+                <a class="btn btn-danger btn-sm"
+                   sec:authorize="hasAnyRole('ADMIN','SECRETARIO')"
+                   th:href="@{|/consultas/excluir/${consulta.id}|}">Excluir</a>
+            </td>
         </tr>
     </table>
     <a class="btn btn-secondary" href="/medicos">Voltar</a>

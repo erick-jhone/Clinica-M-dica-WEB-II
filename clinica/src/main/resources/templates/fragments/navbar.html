@@ -7,7 +7,12 @@
                     <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
                     <li class="nav-item"><a class="nav-link" href="/medicos">Médicos</a></li>
                     <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/agendas">Agendas</a></li>
+                    <li class="nav-item">
+                        <a href="#" onclick="document.getElementById('logoutForm').submit()"
+                           class="nav-link">Logout</a>
+
+                        <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+                    </li>
                 </ul>
             </div>
         </div>

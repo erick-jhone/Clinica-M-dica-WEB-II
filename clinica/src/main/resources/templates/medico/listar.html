@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/head :: head"></head>
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
@@ -20,7 +21,12 @@
 
     <table class="table">
         <tr>
-            <th>ID</th><th>Nome</th><th>CRM</th><th>Especialidade</th><th>Ações</th><th>Agenda</th>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CRM</th>
+            <th>Especialidade</th>
+            <th>Ações</th>
+            <th>Agenda</th>
         </tr>
         <tr th:each="medico : ${medicos}">
             <td th:text="${medico.id}"></td>
@@ -28,12 +34,20 @@
             <td th:text="${medico.crm}"></td>
             <td th:text="${medico.especialidade}"></td>
             <td>
-                <a class="btn btn-info btn-sm" th:href="@{|/medicos/editar/${medico.id}|}">Editar</a>
-                <a class="btn btn-danger btn-sm" th:href="@{|/medicos/excluir/${medico.id}|}">Excluir</a>
-                <a class="btn btn-secondary btn-sm" th:href="@{|/medicos/${medico.id}/consultas|}">Consultas</a>
+                <a class="btn btn-info btn-sm"
+                   sec:authorize="hasAnyRole('ADMIN','SECRETARIO')"
+                   th:href="@{|/medicos/editar/${medico.id}|}">Editar</a>
+
+                <a class="btn btn-danger btn-sm"
+                   sec:authorize="hasRole('ADMIN')"
+                   th:href="@{|/medicos/excluir/${medico.id}|}">Excluir</a>
+
+                <a class="btn btn-secondary btn-sm"
+                   th:href="@{|/medicos/${medico.id}/consultas|}">Consultas</a>
             </td>
             <td>
-                <a class="btn btn-dark" th:href="@{|/secretaria/${medico.id}/agenda/calendario|}">
+                <a class="btn btn-dark" sec:authorize="hasAnyRole('ADMIN','SECRETARIO')"
+                   th:href="@{|/secretaria/${medico.id}/agenda/calendario|}">
                     <i class="bi bi-calendar"></i>
                 </a>
             </td>

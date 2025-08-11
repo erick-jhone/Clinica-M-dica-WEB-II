@@ -46,7 +46,6 @@ public class AgendaController {
             agendaRepository.saveAll(agendasParaMes);
         }
 
-        // Geração do calendário visual
         LocalDate inicio = primeiroDia.minusDays(primeiroDia.getDayOfWeek().getValue() % 7);
         List<List<DiaCalendario>> semanas = new ArrayList<>();
 
