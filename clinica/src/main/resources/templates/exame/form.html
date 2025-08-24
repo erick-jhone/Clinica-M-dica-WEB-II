@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Solicitar Exame</h1>
+
+    <form th:action="@{/exames/save}" th:object="${exame}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{consulta.id}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Nome do Exame</label>
+            <input type="text" class="form-control" th:field="*{nome}" required/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-control" th:field="*{tipo}" required>
+                <option value="">Selecione</option>
+                <option value="Imagem">Imagem</option>
+                <option value="Laboratório">Laboratório</option>
+                <option value="Outro">Outro</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observações</label>
+            <textarea class="form-control" th:field="*{observacoes}"></textarea>
+        </div>
+
+        <button class="btn btn-success" type="submit">Salvar</button>
+        <a class="btn btn-secondary" th:href="@{'/consultas/detalhe/' + ${consulta.id}}">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

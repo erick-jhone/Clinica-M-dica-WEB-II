@@ -1,9 +1,6 @@
 package com.ifto.clinica.controller;
 
-import com.ifto.clinica.model.entity.Agenda;
-import com.ifto.clinica.model.entity.Consulta;
-import com.ifto.clinica.model.entity.Paciente;
-import com.ifto.clinica.model.entity.Pessoa;
+import com.ifto.clinica.model.entity.*;
 import com.ifto.clinica.model.repository.AgendaRepository;
 import com.ifto.clinica.model.repository.ConsultaRepository;
 import com.ifto.clinica.model.repository.MedicoRepository;
@@ -98,4 +95,18 @@ public class ConsultaController {
         consultaRepository.save(consulta);
         return "redirect:/consultas";
     }
+
+    @GetMapping("/detalhe/{id}")
+    public String detalhe(@PathVariable Long id, Model model) {
+        Consulta consulta = consultaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Consulta não encontrada"));
+
+        List<Exame> exames = consulta.getExames();
+
+        model.addAttribute("consulta", consulta);
+        model.addAttribute("exames", exames);
+
+        return "consulta/detalhe";
+    }
+
 }

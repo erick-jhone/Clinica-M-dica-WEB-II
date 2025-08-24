@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -48,7 +49,7 @@ public class PacienteController {
     }
 
     @GetMapping("/form")
-    public ModelAndView form(Paciente paciente){
+    public ModelAndView form(Paciente paciente) {
         return new ModelAndView("/paciente/form");
     }
 
@@ -183,4 +184,20 @@ public class PacienteController {
         model.addAttribute("pacientes", pacienteRepository.buscarPorNome(nome));
         return "paciente/listar";
     }
+
+
+    @GetMapping("/prontuario/{id}")
+    public String prontuario(@PathVariable Long id, Model model) {
+        Paciente paciente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
+
+        // Carregar consultas e exames associados
+        List<Consulta> consultas = consultaRepository.findByPacienteId(id);
+
+        model.addAttribute("paciente", paciente);
+        model.addAttribute("consultas", consultas);
+
+        return "paciente/prontuario";
+    }
+
 }

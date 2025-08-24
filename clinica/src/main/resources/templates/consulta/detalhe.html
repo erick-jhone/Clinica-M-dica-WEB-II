@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container">
+    <h1>Detalhes da Consulta</h1>
+
+    <p><b>Paciente:</b> <span th:text="${consulta.paciente.nome}"></span></p>
+    <p><b>Médico:</b> <span th:text="${consulta.medico.nome}"></span></p>
+    <p><b>Descrição:</b> <span th:text="${consulta.descricao}"></span></p>
+
+    <h3>Exames Solicitados</h3>
+    <a class="btn btn-primary mb-2"
+       th:href="@{'/exames/novo/' + ${consulta.id}}">+ Solicitar Exame</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Observações</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="exame : ${exames}">
+            <td th:text="${exame.nome}"></td>
+            <td th:text="${exame.tipo}"></td>
+            <td th:text="${exame.observacoes}"></td>
+            <td>
+                <a class="btn btn-danger btn-sm" th:href="@{'/exames/delete/' + ${exame.id}}">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

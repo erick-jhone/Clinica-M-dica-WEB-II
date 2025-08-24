@@ -12,4 +12,7 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
 
     @Query("SELECT c FROM Consulta c WHERE c.agenda.data = :data")
     List<Consulta> findByData(@Param("data") LocalDate data);
+
+    List<Consulta> findByPacienteId(Long pacienteId);
+
 }

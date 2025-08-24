@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Consulta {
 
@@ -29,6 +32,11 @@ public class Consulta {
     @OneToOne
     @JoinColumn(name = "agenda_id", unique = true)
     private Agenda agenda;
+
+    @OneToMany(mappedBy = "consulta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Exame> exames = new ArrayList<>();
+
+
 
     public Long getId() {
         return id;
@@ -69,4 +77,14 @@ public class Consulta {
     public void setAgenda(Agenda agenda) {
         this.agenda = agenda;
     }
+
+    public List<Exame> getExames() {
+        return exames;
+    }
+
+    public void setExames(List<Exame> exames) {
+        this.exames = exames;
+    }
 }
+
+
