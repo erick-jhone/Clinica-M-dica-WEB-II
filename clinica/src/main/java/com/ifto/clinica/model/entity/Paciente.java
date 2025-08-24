@@ -17,6 +17,11 @@ public class Paciente extends Pessoa {
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
+
+
     public String getCpf() {
         return cpf;
     }
@@ -31,5 +36,14 @@ public class Paciente extends Pessoa {
 
     public void setConsultas(List<Consulta> consultas) {
         this.consultas = consultas;
+    }
+
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }

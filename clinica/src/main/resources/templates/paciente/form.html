@@ -6,21 +6,89 @@
 
 <div class="container">
     <h1 th:text="${paciente.id == null} ? 'Novo Paciente' : 'Editar Paciente'"></h1>
+
     <form th:action="@{/pacientes/save}" th:object="${paciente}" method="post">
         <input type="hidden" th:field="*{id}"/>
+
+        <!-- Nome -->
         <div class="mb-3">
             <label class="form-label">Nome</label>
             <input class="form-control" type="text" th:field="*{nome}" th:errorclass="is-invalid">
-            <label class="invalid-feedback" th:if="${#fields.hasErrors('cpf')}" th:errors="*{nome}"></label>
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></label>
         </div>
+
+        <!-- CPF -->
         <div class="mb-3">
             <label class="form-label">CPF</label>
             <input class="form-control" type="text" th:field="*{cpf}" th:errorclass="is-invalid">
             <label class="invalid-feedback" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></label>
         </div>
+
+        <hr>
+
+        <h4>Endereço</h4>
+
+        <!-- CEP -->
+        <div class="mb-3">
+            <label class="form-label">CEP</label>
+            <input class="form-control" type="text" th:field="*{endereco.cep}" id="cep" th:errorclass="is-invalid">
+            <label class="invalid-feedback" th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}"></label>
+        </div>
+
+        <!-- Logradouro -->
+        <div class="mb-3">
+            <label class="form-label">Logradouro</label>
+            <input class="form-control" type="text" th:field="*{endereco.logradouro}" id="logradouro">
+        </div>
+
+        <!-- Número -->
+        <div class="mb-3">
+            <label class="form-label">Número</label>
+            <input class="form-control" type="text" th:field="*{endereco.numero}">
+        </div>
+
+        <!-- Complemento -->
+        <div class="mb-3">
+            <label class="form-label">Complemento</label>
+            <input class="form-control" type="text" th:field="*{endereco.complemento}">
+        </div>
+
+        <!-- Cidade -->
+        <div class="mb-3">
+            <label class="form-label">Cidade</label>
+            <input class="form-control" type="text" th:field="*{endereco.cidade.nome}" id="cidade">
+        </div>
+
+        <!-- Estado -->
+        <div class="mb-3">
+            <label class="form-label">Estado</label>
+            <input class="form-control" type="text" th:field="*{endereco.cidade.estado.uf}" id="estado">
+        </div>
+
         <button class="btn btn-success" type="submit">Salvar</button>
         <a class="btn btn-secondary" href="/pacientes">Cancelar</a>
     </form>
 </div>
+
+<!-- Script de preenchimento automático do CEP -->
+<script>
+    document.getElementById('cep').addEventListener('blur', function () {
+        const cep = this.value.replace(/\D/g, '');
+        if (cep.length !== 8) return;
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.erro) {
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                } else {
+                    alert('CEP não encontrado');
+                }
+            });
+    });
+</script>
+
 </body>
 </html>
