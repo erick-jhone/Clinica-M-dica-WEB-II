@@ -22,7 +22,7 @@ public class Endereco {
 
     private String complemento;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;
 

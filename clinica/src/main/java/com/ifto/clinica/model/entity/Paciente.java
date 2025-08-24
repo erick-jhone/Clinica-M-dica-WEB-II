@@ -21,6 +21,9 @@ public class Paciente extends Pessoa {
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Usuario usuario;
 
     public String getCpf() {
         return cpf;
@@ -45,5 +48,13 @@ public class Paciente extends Pessoa {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

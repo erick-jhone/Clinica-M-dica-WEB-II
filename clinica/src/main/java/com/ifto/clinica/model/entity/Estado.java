@@ -13,8 +13,6 @@ public class Estado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String nome;
 
     @NotBlank
     private String uf;
@@ -32,13 +30,7 @@ public class Estado {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
-    }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     public String getUf() {
         return uf;

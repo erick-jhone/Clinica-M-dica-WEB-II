@@ -22,6 +22,9 @@ public class Usuario implements Serializable, UserDetails {
     @Setter
     private String login;
 
+    @OneToOne(mappedBy = "usuario")
+    private Paciente paciente;
+
     private String password;
 
     public void setLogin(String login) {
@@ -78,4 +81,25 @@ public class Usuario implements Serializable, UserDetails {
     public List<Role> getRoles() {
         return roles;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
 }

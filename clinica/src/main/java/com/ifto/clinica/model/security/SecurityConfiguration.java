@@ -1,8 +1,10 @@
 package com.ifto.clinica.model.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
@@ -19,18 +21,26 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity //indica ao Spring que serão definidas configurações personalizadas de segurança
 public class SecurityConfiguration {
 
+    @Autowired
+    UsuarioDetailsConfig usuarioDetailsConfig;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
                         customizer ->
                                 customizer
-                                        .requestMatchers("/medicos/list").hasAnyRole("ADMIN")
+                                        .requestMatchers("/pacientes/novo").permitAll()
+                                        .requestMatchers(HttpMethod.POST, "/pacientes/novo").permitAll()
+// libera acess
+                                        .requestMatchers("/medicos/list").hasRole("ADMIN")
                                         .requestMatchers(HttpMethod.POST, "/pessoafisica/save").permitAll()
                                         .requestMatchers("/login/register", "/templates/register").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/login/register").permitAll()
                                         .requestMatchers("/register", "/register/**").permitAll()
-                                        .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                                        // Adiciona permissão para cadastro de paciente
+                                        .requestMatchers("/pacientes/form", "/pacientes/save", "/pacientes/novo").permitAll()
                                         .anyRequest().authenticated()
+
                 )
                 .formLogin(customizer ->
                         customizer
@@ -40,22 +50,22 @@ public class SecurityConfiguration {
                 )
                 .httpBasic(withDefaults()) //configura a autenticação básica (usuário e senha)
                 .logout(LogoutConfigurer::permitAll) //configura a funcionalidade de logout no Spring Security.
-                .rememberMe(customizer -> customizer.userDetailsService(userDetailsService())); //perimite que os usuários permaneçam autenticados mesmo após o fechamento do navegador
+                .rememberMe(withDefaults()); //permite que os usuários permaneçam autenticados mesmo após o fechamento do navegador
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user1 = User.withUsername("user")
-                .password(passwordEncoder().encode("123"))
-                .roles("USUARIO")
-                .build();
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user1, admin);
-    }
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailsService() {
+//        UserDetails user1 = User.withUsername("user")
+//                .password(passwordEncoder().encode("123"))
+//                .roles("USUARIO")
+//                .build();
+//        UserDetails admin = User.withUsername("admin")
+//                .password(passwordEncoder().encode("admin"))
+//                .roles("ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user1, admin);
+//    }
 
     /**
      * Com o método, instanciamos uma instância do encoder BCrypt e deixando o controle dessa instância como responsabilidade do Spring.
@@ -63,6 +73,11 @@ public class SecurityConfiguration {
      *
      * @return
      */
+
+    @Autowired
+    public void configureUserDetails(final AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(usuarioDetailsConfig).passwordEncoder(new BCryptPasswordEncoder());
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
