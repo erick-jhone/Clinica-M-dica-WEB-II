@@ -4,12 +4,13 @@ import com.ifto.clinica.model.entity.*;
 import com.ifto.clinica.model.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Collections;
 import java.util.Optional;
@@ -22,7 +23,6 @@ public class PacienteController {
     private final ConsultaRepository consultaRepository;
     private final UsuarioRepository usuarioRepository;
     private final RoleRepository roleRepository;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     private final EnderecoRepository enderecoRepository;
     private final CidadeRepository cidadeRepository;
@@ -130,18 +130,14 @@ public class PacienteController {
             }
         }
 
-        // 🔹 Criação opcional de usuário
-        if (username != null && !username.isBlank() && password != null && !password.isBlank()) {
-            Usuario usuario = paciente.getUsuario();
-            if (usuario == null) {
-                usuario = new Usuario();
-            }
+        Usuario usuario = paciente.getUsuario();
+        if (usuario != null && usuario.getLogin() != null && !usuario.getLogin().isBlank()
+                && usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
 
-            usuario.setLogin(username);
-            String senhaCodificada = passwordEncoder.encode(password);
-            usuario.setPassword(senhaCodificada);
+            // Criptografa senha antes de salvar
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
-            // Só adiciona ROLE_CLIENTE se não tiver nenhuma role
+            // Garante ROLE_CLIENTE por padrão
             if (usuario.getRoles() == null || usuario.getRoles().isEmpty()) {
                 Role roleCliente = roleRepository.findByNome("ROLE_CLIENTE");
                 if (roleCliente == null) {
@@ -155,6 +151,7 @@ public class PacienteController {
             usuarioRepository.save(usuario);
             paciente.setUsuario(usuario);
         }
+
 
         pacienteRepository.save(paciente);
         return new ModelAndView("redirect:/pacientes");
