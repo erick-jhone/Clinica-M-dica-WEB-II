@@ -10,14 +10,12 @@
 <form th:action="@{/pacientes/save}" th:object="${paciente}" method="post">
     <input type="hidden" th:field="*{id}"/>
 
-    <!-- Nome -->
     <div class="mb-3">
         <label class="form-label">Nome Completo</label>
         <input class="form-control" type="text" th:field="*{nome}" th:errorclass="is-invalid">
         <label class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></label>
     </div>
 
-    <!-- CPF -->
     <div class="mb-3">
         <label class="form-label">CPF</label>
         <input class="form-control" type="text" th:field="*{cpf}" th:errorclass="is-invalid">
@@ -34,30 +32,24 @@
         </div>
     </div>
 
-    <!-- Campos de endereço dentro do collapse -->
     <div class="collapse" id="enderecoCollapse">
         <div class="card card-body">
-            <!-- Logradouro -->
             <div class="mb-3">
                 <label class="form-label">Logradouro</label>
                 <input class="form-control" type="text" th:field="*{endereco.logradouro}" id="logradouro">
             </div>
-            <!-- Número -->
             <div class="mb-3">
                 <label class="form-label">Número</label>
                 <input class="form-control" type="text" th:field="*{endereco.numero}">
             </div>
-            <!-- Complemento -->
             <div class="mb-3">
                 <label class="form-label">Complemento</label>
                 <input class="form-control" type="text" th:field="*{endereco.complemento}">
             </div>
-            <!-- Cidade -->
             <div class="mb-3">
                 <label class="form-label">Cidade</label>
                 <input class="form-control" type="text" th:field="*{endereco.cidade.nome}" id="cidade">
             </div>
-            <!-- Estado -->
             <div class="mb-3">
                 <label class="form-label">Estado</label>
                 <input class="form-control" type="text" th:field="*{endereco.cidade.estado.uf}" id="estado">
@@ -66,19 +58,19 @@
     </div>
 
     <hr>
+    <div th:if="${paciente.id == null}">
 
-    <!-- Login -->
+
     <div class="mb-3">
         <label class="form-label">Nome de usuário</label>
         <input class="form-control" type="text" th:field="*{usuario.login}">
     </div>
 
-    <!-- Senha -->
     <div class="mb-3">
         <label class="form-label">Senha</label>
         <input class="form-control" type="password" th:field="*{usuario.password}">
     </div>
-
+    </div>
     <button class="btn btn-salvar" type="submit">Salvar</button>
     <a class="btn btn-secondary" href="/pacientes">Cancelar</a>
 </form>
@@ -114,6 +106,17 @@
                 }
             });
     });
+
+    // 👉 Se já existe endereço (edição), abrir automaticamente o collapse
+    window.addEventListener('DOMContentLoaded', function () {
+        const logradouro = document.getElementById('logradouro').value;
+        const cidade = document.getElementById('cidade').value;
+        const estado = document.getElementById('estado').value;
+
+        if (logradouro || cidade || estado) {
+            enderecoCollapse.show();
+        }
+    });
 </script>
 <style>
 
@@ -126,7 +129,7 @@
         border-color: #003366;
         box-shadow: 0 0 8px #003366;
         background-color: rgba(255,255,255,0.2);
-        color: #003366; /* importante: mantém o texto visível no foco */
+        color: #003366;
         outline: none;
     }
     .btn-salvar {

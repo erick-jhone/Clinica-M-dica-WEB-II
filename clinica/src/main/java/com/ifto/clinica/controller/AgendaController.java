@@ -63,8 +63,8 @@ public class AgendaController {
         model.addAttribute("calendario", semanas);
         model.addAttribute("mesNome", mesAtual.getMonth().getDisplayName(TextStyle.FULL, new Locale("pt", "BR")));
         model.addAttribute("ano", mesAtual.getYear());
-
-        return "agenda/agenda-calendario";
+        model.addAttribute("pagina","agenda/agenda-calendario");
+        return "fragments/main";
     }
 
 

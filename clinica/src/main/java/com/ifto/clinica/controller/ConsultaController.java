@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/consultas")
@@ -38,7 +41,8 @@ public class ConsultaController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("consultas", consultaRepository.findAll());
-        return "consulta/listar";
+        model.addAttribute("pagina","consulta/listar");
+        return "fragments/main";
     }
 
     @GetMapping("/novo")
@@ -71,14 +75,15 @@ public class ConsultaController {
             model.addAttribute("agendas", List.of());
         }
 
-        return "consulta/form";
+        model.addAttribute("pagina","consulta/form");
+        return "fragments/main";
     }
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("consulta", consultaRepository.findById(id).orElseThrow());
-        return "consulta/form";
-    }
+        model.addAttribute("pagina","consulta/form");
+        return "fragments/main";    }
 
     @PostMapping("/save")
     public String save(@Valid Consulta consulta, BindingResult result, Model model) {
@@ -91,13 +96,17 @@ public class ConsultaController {
                 model.addAttribute("agendas", agendas);
                 model.addAttribute("medicoSelecionado", consulta.getMedico().getId());
             } else {
-                model.addAttribute("agendas", List.of());
+                model.addAttribute("agendas", Collections.emptyList());
             }
 
-            return "consulta/form";
+            model.addAttribute("pagina","consulta/form");
+            return "fragments/main";
         }
-
         consultaRepository.save(consulta);
+
+        if (consulta.getAgenda() != null && consulta.getAgenda().getId() != null) {
+            agendaRepository.marcarComoIndisponivel(consulta.getAgenda().getId());
+        }
         return "redirect:/consultas";
     }
 
@@ -111,7 +120,8 @@ public class ConsultaController {
         model.addAttribute("consulta", consulta);
         model.addAttribute("exames", exames);
 
-        return "consulta/detalhe";
+        model.addAttribute("pagina","consulta/detalhe");
+        return "fragments/main";
     }
 
 }

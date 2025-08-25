@@ -10,7 +10,7 @@
             vertical-align: top;
         }
         .bloqueado {
-            background-color: #f8f9fa; /* cor clara para bloqueados */
+            background-color: #f8f9fa;
             color: #999;
             pointer-events: none;
         }
@@ -41,7 +41,6 @@
                     <a class="btn btn-sm btn-outline-primary mt-2"
                        th:if="${!(dia.data.dayOfWeek.name() == 'SATURDAY' or dia.data.dayOfWeek.name() == 'SUNDAY')}"
                        th:href="@{|/secretaria/${medico.id}/agenda/horarios?data=${dia.data}|}">
-<!--                       th:href="@{|/secretaria/agenda/${medico.id}/novo?data=${dia.data}|}">-->
                         + Horário
                     </a>
                     <span th:if="${dia.data.dayOfWeek.name() == 'SATURDAY' or dia.data.dayOfWeek.name() == 'SUNDAY'}">

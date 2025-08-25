@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head"></head>
+<!--<head th:replace="fragments/head :: head"></head>-->
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+<!--<div th:replace="fragments/navbar :: navbar"></div>-->
 
 <div class="container">
     <h1>Consultas</h1>
@@ -33,9 +33,11 @@
             <td th:text="${consulta.medico.nome}"></td>
             <td th:text="${consulta.descricao}"></td>
             <td>
-                <a class="btn btn-info btn-sm" th:href="@{|/consultas/editar/${consulta.id}|}">Editar</a>
-                <a class="btn btn-danger btn-sm" th:href="@{|/consultas/excluir/${consulta.id}|}">Excluir</a>
-                <a class="btn btn-dark btn-sm" th:href="@{|consultas/detalhe/${consulta.id}|}">Exames</a>
+                <div class="d-flex">
+                    <a class="btn btn-info btn-sm me-1" th:href="@{|/consultas/editar/${consulta.id}|}">Editar</a>
+                    <a class="btn btn-danger btn-sm me-1" th:href="@{|/consultas/excluir/${consulta.id}|}">Excluir</a>
+                    <a class="btn btn-dark btn-sm" th:href="@{|consultas/detalhe/${consulta.id}|}">Exames</a>
+                </div>
             </td>
         </tr>
     </table>

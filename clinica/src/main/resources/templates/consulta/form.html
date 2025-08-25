@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head"></head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
 
 <div class="container">
     <h1 th:text="${consulta.id == null} ? 'Nova Consulta' : 'Editar Consulta'"></h1>
@@ -54,6 +52,7 @@
             <select class="form-control" th:field="*{agenda}" th:errorclass="is-invalid" id="agendaSelect">
                 <option value="" disabled th:selected="${consulta.agenda == null}">Selecione uma agenda</option>
                 <option th:each="agenda : ${agendas}"
+                        th:if="${agenda.status.name() == 'DISPONIVEL'}"
                         th:value="${agenda.id}"
                         th:text="'Data: ' + ${agenda.data} + ' - ' + ${agenda.horarioInicio} + ' às ' + ${agenda.horarioFim}"
                         th:selected="${consulta.agenda != null and agenda.id == consulta.agenda.id}">

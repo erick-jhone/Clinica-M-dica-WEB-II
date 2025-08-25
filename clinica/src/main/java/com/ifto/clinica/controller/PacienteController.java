@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -66,12 +67,14 @@ public class PacienteController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("pacientes", pacienteRepository.findAll());
-        return "paciente/listar";
+        model.addAttribute("pagina", "paciente/listar");
+        return "fragments/main";
     }
 
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("paciente", new Paciente());
+
         return "paciente/form";
     }
 
@@ -129,25 +132,34 @@ public class PacienteController {
                 paciente.setEndereco(endereco);
             }
         }
+        if (paciente.getId() == null) {
+            Usuario usuario = paciente.getUsuario();
 
-        Usuario usuario = paciente.getUsuario();
-        if (usuario != null && usuario.getLogin() != null && !usuario.getLogin().isBlank()
-                && usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
+            if (usuario != null && usuario.getLogin() != null && !usuario.getLogin().isBlank()
+                    && usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
 
-            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+                usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
-            if (usuario.getRoles() == null || usuario.getRoles().isEmpty()) {
-                Role roleCliente = roleRepository.findByNome("ROLE_CLIENTE");
-                if (roleCliente == null) {
-                    roleCliente = new Role();
-                    roleCliente.setNome("ROLE_CLIENTE");
-                    roleRepository.save(roleCliente);
+                if (usuario.getRoles() == null || usuario.getRoles().isEmpty()) {
+                    Role roleCliente = roleRepository.findByNome("ROLE_CLIENTE");
+                    if (roleCliente == null) {
+                        roleCliente = new Role();
+                        roleCliente.setNome("ROLE_CLIENTE");
+                        roleRepository.save(roleCliente);
+                    }
+
+                    List<Role> roles = new ArrayList<>();
+                    roles.add(roleCliente);
+                    usuario.setRoles(roles);
                 }
-                usuario.setRoles(Collections.singletonList(roleCliente));
+
+                usuarioRepository.save(usuario);
+                paciente.setUsuario(usuario);
+            } else {
+                Usuario usuarioExistente = pacienteRepository.findById(paciente.getId()).get().getUsuario();
+                paciente.setUsuario(usuarioExistente);
             }
 
-            usuarioRepository.save(usuario);
-            paciente.setUsuario(usuario);
         }
 
 

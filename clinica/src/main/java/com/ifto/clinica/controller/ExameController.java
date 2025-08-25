@@ -36,7 +36,8 @@ public class ExameController {
         model.addAttribute("exame", exame);
         model.addAttribute("consulta", consulta);
 
-        return "exame/form";
+        model.addAttribute("pagina","exame/form");
+        return "fragments/main";
     }
 
     @PostMapping("/save")

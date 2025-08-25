@@ -6,6 +6,8 @@ import com.ifto.clinica.model.entity.Agenda.StatusAgenda;
 import com.ifto.clinica.model.entity.Medico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,5 +32,8 @@ import java.util.List;
         List<Agenda> findByMedicoIdAndDataOrderByHorarioInicioAsc(Long medicoId, LocalDate data);
 
         List<Agenda> findByMedicoIdAndStatus(Long medicoId, Agenda.StatusAgenda status);
-
+        @Transactional
+        @Modifying
+        @Query("UPDATE Agenda a SET a.status = 'INDISPONIVEL' WHERE a.id = :id")
+        int marcarComoIndisponivel(Long id);
     }
