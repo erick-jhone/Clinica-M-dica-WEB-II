@@ -31,7 +31,8 @@ public class MedicoController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("medicos", medicoRepository.findAll());
-        return "medico/listar";
+        model.addAttribute("pagina","medico/listar");
+        return "fragments/main";
     }
     @GetMapping("/visitante")
     public String listarMedicos(Model model) {
@@ -44,7 +45,8 @@ public class MedicoController {
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("medico", new Medico());
-        return "medico/form";
+        model.addAttribute("pagina","medico/form");
+        return "fragments/main";
     }
 
     @PostMapping("/save")
@@ -71,7 +73,8 @@ public class MedicoController {
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("medico", medicoRepository.findById(id).orElseThrow());
-        return "medico/form";
+        model.addAttribute("pagina","medico/form");
+        return "fragments/main";
     }
 
     @GetMapping("/excluir/{id}")
@@ -85,13 +88,15 @@ public class MedicoController {
         Medico medico = medicoRepository.findById(id).orElseThrow();
         model.addAttribute("consultas", medico.getConsultas());
         model.addAttribute("medico", medico);
-        return "medico/consultas";
+        model.addAttribute("pagina","medico/consultas");
+        return "fragments/main";
     }
 
     @GetMapping("/buscar")
     public String buscarPorNome(@RequestParam("nome") String nome, Model model) {
         model.addAttribute("medicos", medicoRepository.buscarPorNome(nome));
-        return "medico/listar";
+        model.addAttribute("pagina","medico/listar");
+        return "fragments/main";
     }
 
 

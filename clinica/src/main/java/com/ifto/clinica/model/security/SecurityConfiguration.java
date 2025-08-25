@@ -43,13 +43,11 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    // 🔑 O encoder para criptografar senhas
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 🔑 Configura o AuthenticationManager usando o UserDetailsService padrão
     @Bean
     public AuthenticationManager authenticationManager(
             HttpSecurity http, PasswordEncoder passwordEncoder,

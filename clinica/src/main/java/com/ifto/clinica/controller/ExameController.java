@@ -43,8 +43,8 @@ public class ExameController {
     @PostMapping("/save")
     public String save(@Valid Exame exame, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("consulta", exame.getConsulta());
-            return "exame/form";
+            model.addAttribute("pagina","exame/form");
+            return "fragments/main";
         }
         exameRepository.save(exame);
         return "redirect:/consultas/detalhe/" + exame.getConsulta().getId();

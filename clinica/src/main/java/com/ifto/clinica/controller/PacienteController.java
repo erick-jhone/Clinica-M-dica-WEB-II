@@ -58,11 +58,6 @@ public class PacienteController {
         return new ModelAndView("/paciente/form");
     }
 
-//    @GetMapping("/form")
-//    public String form(Model model) {
-//        model.addAttribute("paciente", new Paciente());
-//        return "paciente/form";
-//    }
 
     @GetMapping
     public String listar(Model model) {
@@ -191,7 +186,8 @@ public class PacienteController {
     @GetMapping("/buscar")
     public String buscarPorNome(@RequestParam("nome") String nome, Model model) {
         model.addAttribute("pacientes", pacienteRepository.buscarPorNome(nome));
-        return "paciente/listar";
+        model.addAttribute("pagina", "paciente/listar");
+        return "fragments/main";
     }
 
 
