@@ -33,7 +33,13 @@ public class MedicoController {
         model.addAttribute("medicos", medicoRepository.findAll());
         return "medico/listar";
     }
-
+    @GetMapping("/visitante")
+    public String listarMedicos(Model model) {
+        model.addAttribute("medicos", medicoRepository.findAll());
+        model.addAttribute("title", "Médicos Disponíveis");
+        model.addAttribute("pagina", "medico/lista-visitantes");
+        return "fragments/main-cliente";
+    }
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("medico", new Medico());

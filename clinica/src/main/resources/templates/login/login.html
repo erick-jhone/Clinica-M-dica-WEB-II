@@ -9,7 +9,7 @@
 
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
   <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
-    <h3 class="text-center mb-4">Acesse sua conta</h3>
+    <h3 class="text-center mb-4" style="color: #003366">Acesse sua conta</h3>
 
     <div th:if="${param.error}" class="alert alert-danger" role="alert">
       Usuário ou senha inválidos!
@@ -30,13 +30,13 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha" required>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+      <button type="submit" class="btn btn-primary w-100" style="background-color: #003366">Entrar</button>
     </form>
 
     <hr>
 
-    <p class="text-center mb-0">
-      Não tem conta? <a th:href="@{/login/register}">Cadastre-se aqui</a>
+    <p class="text-center mb-0" >
+      Não tem conta? <a th:href="@{/login/register}" style="color: #003366">Cadastre-se aqui</a>
     </p>
   </div>
 </div>

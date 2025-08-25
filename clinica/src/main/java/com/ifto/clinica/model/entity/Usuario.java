@@ -22,8 +22,9 @@ public class Usuario implements Serializable, UserDetails {
     @Setter
     private String login;
 
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
     private Paciente paciente;
+
 
     private String password;
 
@@ -36,7 +37,7 @@ public class Usuario implements Serializable, UserDetails {
     }
 
     @Getter
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     @Override

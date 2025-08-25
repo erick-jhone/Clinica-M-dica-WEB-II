@@ -19,7 +19,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomAuthenticationSuccessHandler successHandler) throws Exception {
         http
                 .authorizeHttpRequests(customizer -> customizer
                         .requestMatchers("/pacientes/novo").permitAll()
@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 )
                 .formLogin(customizer -> customizer
                         .loginPage("/login")
-                        .defaultSuccessUrl("/consultas", true)
+                        .successHandler(successHandler)
                         .permitAll()
                 )
                 .httpBasic(withDefaults())

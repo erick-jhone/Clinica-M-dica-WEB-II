@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/head :: head"></head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="fragments/navbar :: navbar" sec:authorize="hasAnyRole('ADMIN','SECRETARIO', 'MEDICO')"></div>
+
 
 <div class="container mt-4">
     <h1 class="text-center mb-5" style="color: #003366;">
@@ -16,6 +18,7 @@
                     <h5 class="card-title">Consulta em <span th:text="${consulta.agenda.data}"></span></h5>
                     <p class="card-subtitle mb-2"><b>Médico:</b> <span th:text="${consulta.medico.nome}"></span></p>
 
+                    <!-- Campos que vão aparecer no hover -->
                     <div class="hover-details">
                         <p class="card-text"><b>Descrição:</b> <span th:text="${consulta.descricao}"></span></p>
                         <h6>Exames Solicitados:</h6>

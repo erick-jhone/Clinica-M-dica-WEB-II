@@ -1,0 +1,18 @@
+<section th:fragment="conteudo">
+  <div class="container mt-4">
+    <h2 class="mb-4">Médicos Disponíveis</h2>
+    <div class="parent">
+      <div th:each="medico : ${medicos}" class="card">
+        <div class="content-box">
+          <span class="card-title" th:text="${medico.nome}">Nome do Médico</span>
+          <p class="card-content" th:text="${medico.especialidade}">Especialidade</p>
+          <a th:href="@{'/agendar/' + ${medico.id}}" class="see-more">Agendar Consulta</a>
+        </div>
+        <div class="date-box">
+          <span class="month">CRM</span>
+          <span class="date" th:text="${medico.crm}">00000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

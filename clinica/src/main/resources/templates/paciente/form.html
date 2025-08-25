@@ -2,16 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
 
-<div class="container">
-    <h1 th:text="${paciente.id == null} ? 'Novo Paciente' : 'Editar Paciente'"></h1>
+<!--<div class="container mt-5 mb-5">-->
+<div class="card shadow p-4" style="width: 100%; max-width: 600px;">
+    <h3 class="text-center mb-5" style="color: #003366;"  th:text="${paciente.id == null} ? 'Registro de Paciente' : 'Editar Paciente'"></h3>
+
 <form th:action="@{/pacientes/save}" th:object="${paciente}" method="post">
     <input type="hidden" th:field="*{id}"/>
 
     <!-- Nome -->
     <div class="mb-3">
-        <label class="form-label">Nome</label>
+        <label class="form-label">Nome Completo</label>
         <input class="form-control" type="text" th:field="*{nome}" th:errorclass="is-invalid">
         <label class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></label>
     </div>
@@ -25,52 +27,51 @@
 
     <hr>
 
-    <h4>Endereço</h4>
-
-    <!-- CEP -->
+    <!-- Campos de endereço dentro do collapse -->
     <div class="mb-3">
         <label class="form-label">CEP</label>
-        <input class="form-control" type="text" th:field="*{endereco.cep}" id="cep" th:errorclass="is-invalid">
-        <label class="invalid-feedback" th:if="${#fields.hasErrors('endereco.cep')}" th:errors="*{endereco.cep}"></label>
+        <div class="input-group">
+            <input class="form-control" type="text" th:field="*{endereco.cep}" id="cep">
+            <button class="btn btn-cep" type="button" id="buscarCepBtn">Pesquisar CEP</button>
+        </div>
     </div>
 
-    <!-- Logradouro -->
-    <div class="mb-3">
-        <label class="form-label">Logradouro</label>
-        <input class="form-control" type="text" th:field="*{endereco.logradouro}" id="logradouro">
-    </div>
-
-    <!-- Número -->
-    <div class="mb-3">
-        <label class="form-label">Número</label>
-        <input class="form-control" type="text" th:field="*{endereco.numero}">
-    </div>
-
-    <!-- Complemento -->
-    <div class="mb-3">
-        <label class="form-label">Complemento</label>
-        <input class="form-control" type="text" th:field="*{endereco.complemento}">
-    </div>
-
-    <!-- Cidade -->
-    <div class="mb-3">
-        <label class="form-label">Cidade</label>
-        <input class="form-control" type="text" th:field="*{endereco.cidade.nome}" id="cidade">
-    </div>
-
-    <!-- Estado -->
-    <div class="mb-3">
-        <label class="form-label">Estado</label>
-        <input class="form-control" type="text" th:field="*{endereco.cidade.estado.uf}" id="estado">
+    <!-- Campos de endereço dentro do collapse -->
+    <div class="collapse" id="enderecoCollapse">
+        <div class="card card-body">
+            <!-- Logradouro -->
+            <div class="mb-3">
+                <label class="form-label">Logradouro</label>
+                <input class="form-control" type="text" th:field="*{endereco.logradouro}" id="logradouro">
+            </div>
+            <!-- Número -->
+            <div class="mb-3">
+                <label class="form-label">Número</label>
+                <input class="form-control" type="text" th:field="*{endereco.numero}">
+            </div>
+            <!-- Complemento -->
+            <div class="mb-3">
+                <label class="form-label">Complemento</label>
+                <input class="form-control" type="text" th:field="*{endereco.complemento}">
+            </div>
+            <!-- Cidade -->
+            <div class="mb-3">
+                <label class="form-label">Cidade</label>
+                <input class="form-control" type="text" th:field="*{endereco.cidade.nome}" id="cidade">
+            </div>
+            <!-- Estado -->
+            <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <input class="form-control" type="text" th:field="*{endereco.cidade.estado.uf}" id="estado">
+            </div>
+        </div>
     </div>
 
     <hr>
 
-    <h4>Dados de acesso</h4>
-
     <!-- Login -->
     <div class="mb-3">
-        <label class="form-label">Login</label>
+        <label class="form-label">Nome de usuário</label>
         <input class="form-control" type="text" th:field="*{usuario.login}">
     </div>
 
@@ -80,16 +81,25 @@
         <input class="form-control" type="password" th:field="*{usuario.password}">
     </div>
 
-    <button class="btn btn-success" type="submit">Salvar</button>
+    <button class="btn btn-salvar" type="submit">Salvar</button>
     <a class="btn btn-secondary" href="/pacientes">Cancelar</a>
 </form>
 </div>
-
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.getElementById('cep').addEventListener('blur', function () {
-        const cep = this.value.replace(/\D/g, '');
-        if (cep.length !== 8) return;
+    const enderecoCollapse = new bootstrap.Collapse(document.getElementById('enderecoCollapse'), {
+        toggle: false
+    });
+
+    document.getElementById('buscarCepBtn').addEventListener('click', function () {
+        const cepInput = document.getElementById('cep');
+        const cep = cepInput.value.replace(/\D/g, '');
+        if (cep.length !== 8) {
+            alert('CEP inválido');
+            return;
+        }
 
         fetch(`https://viacep.com.br/ws/${cep}/json/`)
             .then(response => response.json())
@@ -98,9 +108,53 @@
                     document.getElementById('logradouro').value = data.logradouro;
                     document.getElementById('cidade').value = data.localidade;
                     document.getElementById('estado').value = data.uf;
+
+                    // Expande o collapse mostrando os campos
+                    enderecoCollapse.show();
                 } else {
                     alert('CEP não encontrado');
                 }
             });
     });
 </script>
+<style>
+
+    .container .form-control:hover {
+        box-shadow: 0 0 5px #003366,
+        0 0 10px #003366;
+    }
+
+    .container .form-control:focus {
+        border-color: #003366;
+        box-shadow: 0 0 8px #003366;
+        background-color: rgba(255,255,255,0.2);
+        color: #003366; /* importante: mantém o texto visível no foco */
+        outline: none;
+    }
+    .btn-salvar {
+        background-color: #003366;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-salvar:hover {
+        background-color: #0055aa;
+        box-shadow: 0 0 10px #003366;
+    }
+
+    .btn-cep {
+        background-color: #003366;
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cep:hover {
+        background-color: #0055aa;
+        box-shadow: 0 0 10px #003366;
+    }
+</style>
+
+
+

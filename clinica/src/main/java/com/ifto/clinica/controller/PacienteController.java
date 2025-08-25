@@ -2,8 +2,12 @@ package com.ifto.clinica.controller;
 
 import com.ifto.clinica.model.entity.*;
 import com.ifto.clinica.model.repository.*;
+import com.ifto.clinica.model.security.UsuarioDetails;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -191,7 +195,6 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado"));
 
-        // Carregar consultas e exames associados
         List<Consulta> consultas = consultaRepository.findByPacienteId(id);
 
         model.addAttribute("paciente", paciente);
@@ -200,4 +203,25 @@ public class PacienteController {
         return "paciente/prontuario";
     }
 
+    @GetMapping("/prontuario/visitante")
+    public String prontuarioVisitante(Model model, Authentication authentication) {
+
+        UsuarioDetails usuarioDetails = (UsuarioDetails) authentication.getPrincipal();
+
+        if (usuarioDetails != null
+                && usuarioDetails.getUsuario() != null
+                && usuarioDetails.getUsuario().getPaciente() != null) {
+
+            Paciente paciente = usuarioDetails.getUsuario().getPaciente();
+
+            List<Consulta> consultas = consultaRepository.findByPacienteId(paciente.getId());
+
+            model.addAttribute("paciente", paciente);
+            model.addAttribute("consultas", consultas);
+
+            return "paciente/prontuario";
+        }
+
+        throw new AccessDeniedException("Você não tem permissão para acessar este prontuário.");
+    }
 }
