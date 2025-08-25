@@ -199,8 +199,8 @@ public class PacienteController {
 
         model.addAttribute("paciente", paciente);
         model.addAttribute("consultas", consultas);
-
-        return "paciente/prontuario";
+        model.addAttribute("pagina", "paciente/prontuario");
+        return "fragments/main";
     }
 
     @GetMapping("/prontuario/visitante")
@@ -218,8 +218,8 @@ public class PacienteController {
 
             model.addAttribute("paciente", paciente);
             model.addAttribute("consultas", consultas);
-
-            return "paciente/prontuario";
+            model.addAttribute("pagina", "paciente/prontuario");
+            return "fragments/main-cliente";
         }
 
         throw new AccessDeniedException("Você não tem permissão para acessar este prontuário.");

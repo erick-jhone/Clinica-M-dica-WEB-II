@@ -6,7 +6,7 @@
         <div class="content-box">
           <span class="card-title" th:text="${medico.nome}">Nome do Médico</span>
           <p class="card-content" th:text="${medico.especialidade}">Especialidade</p>
-          <a th:href="@{'/agendar/' + ${medico.id}}" class="see-more">Agendar Consulta</a>
+          <a th:href="@{'https://api.whatsapp.com/send?phone=5563999885078&text&source&app_absent'}" class="see-more">Agendar Consulta</a>
         </div>
         <div class="date-box">
           <span class="month">CRM</span>

@@ -1,0 +1,105 @@
+/* ===== prontuario.css ===== */
+
+/* Container geral */
+.container.mt-4 {
+    margin-top: 2rem !important;
+}
+
+/* Card neon flutuante */
+.card-hover {
+    background-color: #003366; /* azul do card */
+    color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+}
+
+.card-hover:hover {
+    transform: translateY(-15px) scale(1.03);
+    background-color: #ffffff;
+    color: #003366;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Título e subtítulo */
+.card-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.card-subtitle {
+    font-weight: 500;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.card-hover:hover .card-subtitle {
+    color: #003366;
+}
+
+/* Tabela dentro do card */
+table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+table thead {
+    background-color: rgba(255,255,255,0.2);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+table th, table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    color: inherit;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: background-color 0.2s;
+}
+
+/* Hover dos detalhes do card */
+.hover-details {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.card-hover:hover .hover-details {
+    opacity: 1;
+    max-height: 1000px; /* valor grande suficiente para o conteúdo */
+}
+
+/* Título do fragmento */
+h1.text-center.mb-5 {
+    color: #003366;
+}
+
+/* Ajustes para responsividade */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-subtitle {
+        font-size: 0.9rem;
+    }
+
+    table th, table td {
+        font-size: 0.8rem;
+    }
+}

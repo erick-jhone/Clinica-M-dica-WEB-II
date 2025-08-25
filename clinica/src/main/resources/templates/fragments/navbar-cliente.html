@@ -12,10 +12,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarMenu">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="/perfil">Perfil</a></li>
         <a class="nav-link" href="/pacientes/prontuario/visitante">Meu Prontuário</a>
         <li class="nav-item"><a class="nav-link" href="/medicos/visitante">Especialistas</a></li>
-        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        <li class="nav-item">
+          <a href="#" onclick="document.getElementById('logoutForm').submit()"
+             class="nav-link">Logout</a>
+
+          <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+        </li>
       </ul>
     </div>
   </div>

@@ -40,6 +40,7 @@ public class MedicoController {
         model.addAttribute("pagina", "medico/lista-visitantes");
         return "fragments/main-cliente";
     }
+
     @GetMapping("/novo")
     public String novo(Model model) {
         model.addAttribute("medico", new Medico());
