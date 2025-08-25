@@ -74,6 +74,11 @@ public class ConsultaController {
         return "consulta/form";
     }
 
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("consulta", consultaRepository.findById(id).orElseThrow());
+        return "consulta/form";
+    }
 
     @PostMapping("/save")
     public String save(@Valid Consulta consulta, BindingResult result, Model model) {

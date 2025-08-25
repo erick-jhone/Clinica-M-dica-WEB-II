@@ -18,7 +18,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        String redirectUrl = "/"; // fallback padrão
+        String redirectUrl = "/";
 
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             String role = authority.getAuthority();
@@ -31,7 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                     redirectUrl = "/home/visitante";
                     break;
                 case "ROLE_MEDICO":
-                    redirectUrl = "/medicos/";
+                    redirectUrl = "/consultas";
                     break;
                 case "ROLE_SECRETARIO":
                     redirectUrl = "/consultas";

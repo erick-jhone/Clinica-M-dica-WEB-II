@@ -83,31 +83,27 @@ public class PacienteController {
             return form(paciente);
         }
 
-        // 🔹 Processa endereço
         Endereco endereco = paciente.getEndereco();
         if (endereco != null) {
 
-            // 1️⃣ Processa Estado
             Estado estado = endereco.getCidade() != null ? endereco.getCidade().getEstado() : null;
             if (estado != null) {
                 if (estado.getId() != null) {
                     estado = estadoRepository.findById(estado.getId())
                             .orElseThrow(() -> new IllegalArgumentException("Estado inválido!"));
                 } else {
-                    // tenta encontrar pelo nome sigla, caso já exista
                     Optional<Estado> estadoExistente = estadoRepository.findByUf(estado.getUf());
                     if (estadoExistente.isPresent()) {
                         estado = estadoExistente.get();
                     } else {
-                        estado = estadoRepository.save(estado); // salva se não existir
+                        estado = estadoRepository.save(estado);
                     }
                 }
             }
 
-            // 2️⃣ Processa Cidade
             Cidade cidade = endereco.getCidade();
             if (cidade != null) {
-                cidade.setEstado(estado); // garante que cidade aponta para o estado persistido
+                cidade.setEstado(estado);
                 if (cidade.getId() != null) {
                     cidade = cidadeRepository.findById(cidade.getId())
                             .orElseThrow(() -> new IllegalArgumentException("Cidade inválida!"));
@@ -116,21 +112,20 @@ public class PacienteController {
                     if (cidadeExistente.isPresent()) {
                         cidade = cidadeExistente.get();
                     } else {
-                        cidade = cidadeRepository.save(cidade); // salva cidade se não existir
+                        cidade = cidadeRepository.save(cidade);
                     }
                 }
             } else {
                 throw new IllegalArgumentException("Cidade deve estar cadastrada antes de usar no endereço.");
             }
 
-            // 3️⃣ Processa Endereco
-            endereco.setCidade(cidade); // seta cidade persistida
+            endereco.setCidade(cidade);
             Optional<Endereco> enderecoExistente = enderecoRepository
                     .findByCepAndNumeroAndCidade(endereco.getCep(), endereco.getNumero(), cidade);
             if (enderecoExistente.isPresent()) {
                 paciente.setEndereco(enderecoExistente.get());
             } else {
-                endereco = enderecoRepository.save(endereco); // salva novo endereço
+                endereco = enderecoRepository.save(endereco);
                 paciente.setEndereco(endereco);
             }
         }
@@ -139,10 +134,8 @@ public class PacienteController {
         if (usuario != null && usuario.getLogin() != null && !usuario.getLogin().isBlank()
                 && usuario.getPassword() != null && !usuario.getPassword().isBlank()) {
 
-            // Criptografa senha antes de salvar
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
-            // Garante ROLE_CLIENTE por padrão
             if (usuario.getRoles() == null || usuario.getRoles().isEmpty()) {
                 Role roleCliente = roleRepository.findByNome("ROLE_CLIENTE");
                 if (roleCliente == null) {

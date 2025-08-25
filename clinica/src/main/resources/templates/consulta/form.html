@@ -22,7 +22,6 @@
         </noscript>
     </form>
 
-    <!-- Form principal para salvar consulta -->
     <form th:action="@{/consultas/save}" th:object="${consulta}" method="post">
         <input type="hidden" th:field="*{id}"/>
 
@@ -39,7 +38,6 @@
 
         <div class="mb-3">
             <label class="form-label">Médico</label>
-            <!-- Aqui o médico deve estar selecionado para o binding do formulário funcionar -->
             <select class="form-control" th:field="*{medico}" th:errorclass="is-invalid" id="medicoSelectForm">
                 <option value="" disabled th:selected="${consulta.medico == null}">Selecione um médico</option>
                 <option th:each="medico : ${medicos}"

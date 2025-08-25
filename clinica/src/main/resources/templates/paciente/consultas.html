@@ -12,7 +12,7 @@
         </tr>
         <tr th:each="consulta : ${consultas}">
             <td th:text="${consulta.id}"></td>
-            <td th:text="${consulta.data}"></td>
+            <td th:text="${consulta.agenda.data}"></td>
             <td th:text="${consulta.medico.nome}"></td>
             <td th:text="${consulta.descricao}"></td>
         </tr>
